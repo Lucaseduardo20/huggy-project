@@ -9,9 +9,17 @@ class ClientData extends Data
 {
     public function __construct(
         public ?int $id,
+
+        #[Required, StringType]
         public string $name,
+
+        #[Nullable, Email, Unique('clients', 'email')]
         public ?string $email,
+
+        #[Nullable, StringType]
         public ?string $phone,
+
+        #[Required, StringType, Unique('clients', 'huggy_id')]
         public string $huggy_id
     ) {}
 
