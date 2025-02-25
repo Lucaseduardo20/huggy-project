@@ -3,6 +3,7 @@ version: '3.8'
 services:
   huggy-app:
     container_name: huggy-app
+    user: "${USER_ID}:${GROUP_ID}"
     build:
       context: .
       dockerfile: Dockerfile
