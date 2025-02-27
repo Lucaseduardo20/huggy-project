@@ -29,7 +29,7 @@ class ClientData extends Data
             id: $client->id,
             name: $client->name,
             email: $client->email,
-            phone: $client->phone,
+            phone: $client->f_phone,
             huggy_id: $client->huggy_id
         );
     }
