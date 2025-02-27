@@ -7,22 +7,10 @@ import Insight from "../icons/Insight.vue";
 import Trash from '../icons/Trash.vue'
 import Pencil from "../icons/Pencil.vue";
 import {MoveDown, MoveUp} from "lucide-vue-next";
+import Modal from '../utils/Modal.vue'
+import { VueFinalModal, useModal } from 'vue-final-modal'
 
-const contacts = ref([
-    { id: 1, avatar: "HG", name: "Henrique Gomes Santana", email: "henrique.gomes@huggy.io", phone: "75992503245" },
-    { id: 2, avatar: "RM", name: "Rafael Macedo", email: "rafael.macedo@huggy.io", phone: "-" },
-    { id: 3, avatar: "PG", name: "Philippe Gomes Santana", email: "-", phone: "75992514121" },
-    { id: 4, avatar: "LM", name: "Lucas Matos", email: "lucas.matos@huggy.io", phone: "75991457893" },
-    { id: 5, avatar: "CS", name: "Carla Silva", email: "carla.silva@huggy.io", phone: "-" },
-    { id: 6, avatar: "FT", name: "Fernando Torres", email: "-", phone: "75991234567" },
-    { id: 7, avatar: "AB", name: "Ana Beatriz", email: "ana.beatriz@huggy.io", phone: "75995672389" },
-    { id: 8, avatar: "AB", name: "Ana Beatriz", email: "ana.beatriz@huggy.io", phone: "75995672389" },
-    { id: 9, avatar: "AB", name: "Ana Beatriz", email: "ana.beatriz@huggy.io", phone: "75995672389" },
-    { id: 10, avatar: "AB", name: "Ana Beatriz", email: "ana.beatriz@huggy.io", phone: "75995672389" },
-    { id: 11, avatar: "AB", name: "Ana Beatriz", email: "ana.beatriz@huggy.io", phone: "75995672389" },
-    { id: 12, avatar: "AB", name: "Ana Beatriz", email: "ana.beatriz@huggy.io", phone: "75995672389" },
-    { id: 13, avatar: "AB", name: "Ana Beatriz", email: "ana.beatriz@huggy.io", phone: "75995672389" },
-]);
+const contacts = ref([]);
 
 const rowsState = ref<Record<number, boolean>>({});
 
@@ -32,6 +20,7 @@ const itemsPerPage = ref(10);
 const sortColumn = ref('name');
 const sortDirection = ref('asc');
 const searchTerm = ref('');
+const isModalOpen = ref(false);
 
 const sortedContacts = computed(() => {
     return [...filteredContacts.value].sort((a, b) => {
@@ -42,6 +31,10 @@ const sortedContacts = computed(() => {
         return 0;
     });
 });
+
+const openAddModal = () => {
+    isModalOpen.value = true;
+}
 
 const sortBy = (column: string) => {
     if (sortColumn.value === column) {
@@ -94,7 +87,7 @@ const filteredContacts = computed(() => {
                 <input v-model="searchTerm" type="text" class="bg-transparent border-0 text-[14px] font-roboto w-[198px] outline-none" placeholder="Buscar contato">
             </div>
             <div class="flex items-center gap-[8px]">
-                <Button width="198px" label="Adicionar contato">
+                <Button @click="openAddModal()" width="198px" label="Adicionar contato">
                     <template v-slot:icon>
                         <Add />
                     </template>
@@ -135,7 +128,7 @@ const filteredContacts = computed(() => {
 
                 </thead>
                 <tbody class="min-h-[1000px]">
-                <tr v-if="!contacts.length > 0" v-for="contact in paginatedContacts" :key="contact.id" class="hover:bg-gray-50 h-[64px] max-h-[64px]"
+                <tr v-if="contacts.length > 0" v-for="contact in paginatedContacts" :key="contact.id" class="hover:bg-gray-50 h-[64px] max-h-[64px]"
                     @mouseenter="handleOpenActions(contact.id)"
                     @mouseleave="handleCloseActions(contact.id)"
                 >
@@ -185,6 +178,7 @@ const filteredContacts = computed(() => {
                 {{ page }}
             </button>
         </div>
+        <Modal v-model:trigger="isModalOpen" />
     </div>
 </template>
 
