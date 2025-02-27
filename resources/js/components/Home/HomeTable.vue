@@ -4,6 +4,8 @@ import Search from "../icons/Search.vue";
 import Button from "../utils/Button.vue";
 import Add from "../icons/Add.vue";
 import Insight from "../icons/Insight.vue";
+import Trash from '../icons/Trash.vue'
+import Pencil from "../icons/Pencil.vue";
 
 const contacts = ref([
     { id: 1, avatar: "HG", name: "Henrique Gomes Santana", email: "henrique.gomes@huggy.io", phone: "75992503245" },
@@ -13,10 +15,18 @@ const contacts = ref([
     { id: 5, avatar: "CS", name: "Carla Silva", email: "carla.silva@huggy.io", phone: "-" },
     { id: 6, avatar: "FT", name: "Fernando Torres", email: "-", phone: "75991234567" },
     { id: 7, avatar: "AB", name: "Ana Beatriz", email: "ana.beatriz@huggy.io", phone: "75995672389" },
+    { id: 8, avatar: "AB", name: "Ana Beatriz", email: "ana.beatriz@huggy.io", phone: "75995672389" },
+    { id: 9, avatar: "AB", name: "Ana Beatriz", email: "ana.beatriz@huggy.io", phone: "75995672389" },
+    { id: 10, avatar: "AB", name: "Ana Beatriz", email: "ana.beatriz@huggy.io", phone: "75995672389" },
+    { id: 11, avatar: "AB", name: "Ana Beatriz", email: "ana.beatriz@huggy.io", phone: "75995672389" },
+    { id: 12, avatar: "AB", name: "Ana Beatriz", email: "ana.beatriz@huggy.io", phone: "75995672389" },
+    { id: 13, avatar: "AB", name: "Ana Beatriz", email: "ana.beatriz@huggy.io", phone: "75995672389" },
 ]);
 
+const rowsState = ref<Record<number, boolean>>({});
+
 const currentPage = ref(1);
-const itemsPerPage = ref(5);
+const itemsPerPage = ref(10);
 
 const sortColumn = ref('name');
 const sortDirection = ref('asc');
@@ -49,6 +59,14 @@ const paginatedContacts = computed(() => {
 const changePage = (page: number) => {
     currentPage.value = page;
 };
+
+const handleOpenActions = (key: number) => {
+    rowsState.value[key] = true;
+};
+
+const handleCloseActions = (key: number) => {
+    rowsState.value[key] = false;
+};
 </script>
 
 <template>
@@ -71,7 +89,7 @@ const changePage = (page: number) => {
         </div>
 
         <div class="overflow-x-auto">
-            <table class="min-w-full">
+            <table class="min-w-full h-auto">
                 <thead class="text-gray-600 border-b border-gray-100">
                 <tr>
                     <th class="px-4 py-2 text-left ths cursor-pointer" @click="sortBy('name')">
@@ -86,8 +104,11 @@ const changePage = (page: number) => {
                     <th class="px-4 py-2 text-center ths">Ações</th>
                 </tr>
                 </thead>
-                <tbody>
-                <tr v-for="contact in paginatedContacts" :key="contact.id" class="hover:bg-gray-50 h-[64px]">
+                <tbody class="min-h-[1000px]">
+                <tr v-for="contact in paginatedContacts" :key="contact.id" class="hover:bg-gray-50 h-[64px] max-h-[64px]"
+                    @mouseenter="handleOpenActions(contact.id)"
+                    @mouseleave="handleCloseActions(contact.id)"
+                >
                     <td class="px-4 table-data flex items-center space-x-2">
                         <div class="w-8 h-8 rounded-full flex items-center justify-center text-[#180D6E] font-bold font-roboto">
                             {{ contact.avatar }}
@@ -96,13 +117,15 @@ const changePage = (page: number) => {
                     </td>
                     <td class="px-4 table-data">{{ contact.email || '-' }}</td>
                     <td class="px-4 table-data">{{ contact.phone || '-' }}</td>
-                    <td class="px-4 table-data flex justify-center space-x-2">
-                        <button class="text-gray-500 hover:text-blue-500">
-                            ✏️
-                        </button>
-                        <button class="text-gray-500 hover:text-red-500">
-                            🗑️
-                        </button>
+                    <td class="px-4 table-data space-x-2 min-w-[83px]">
+                        <div class="w-full h-full flex justify-center gap-1.5">
+                            <button v-if="rowsState[contact.id]" class="text-gray-500">
+                                <Pencil />
+                            </button>
+                            <button v-if="rowsState[contact.id]" class="text-gray-500 hover:text-red-500">
+                                <Trash />
+                            </button>
+                        </div>
                     </td>
                 </tr>
                 </tbody>
