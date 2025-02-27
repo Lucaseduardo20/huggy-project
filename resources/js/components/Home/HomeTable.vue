@@ -6,6 +6,7 @@ import Add from "../icons/Add.vue";
 import Insight from "../icons/Insight.vue";
 import Trash from '../icons/Trash.vue'
 import Pencil from "../icons/Pencil.vue";
+import {MoveDown, MoveUp} from "lucide-vue-next";
 
 const contacts = ref([
     { id: 1, avatar: "HG", name: "Henrique Gomes Santana", email: "henrique.gomes@huggy.io", phone: "75992503245" },
@@ -30,9 +31,10 @@ const itemsPerPage = ref(10);
 
 const sortColumn = ref('name');
 const sortDirection = ref('asc');
+const searchTerm = ref('');
 
 const sortedContacts = computed(() => {
-    return [...contacts.value].sort((a, b) => {
+    return [...filteredContacts.value].sort((a, b) => {
         const aValue = a[sortColumn.value];
         const bValue = b[sortColumn.value];
         if (aValue < bValue) return sortDirection.value === 'asc' ? -1 : 1;
@@ -67,6 +69,21 @@ const handleOpenActions = (key: number) => {
 const handleCloseActions = (key: number) => {
     rowsState.value[key] = false;
 };
+
+const filteredContacts = computed(() => {
+    if (!searchTerm.value) {
+        return contacts.value;
+    }
+
+    const term = searchTerm.value.toLowerCase();
+    return contacts.value.filter(contact => {
+        return (
+            contact.name.toLowerCase().includes(term) ||
+            contact.email.toLowerCase().includes(term) ||
+            contact.phone.toLowerCase().includes(term)
+        );
+    });
+});
 </script>
 
 <template>
@@ -74,7 +91,7 @@ const handleCloseActions = (key: number) => {
         <div class="flex justify-between">
             <div class="search-input w-[250px] h-[36px] rounded-[8px] border border-[#e1e1e1] bg-[#f8f8f8] flex items-center justify-around">
                 <Search />
-                <input type="text" class="bg-transparent border-0 text-[14px] font-roboto w-[198px] outline-none" placeholder="Buscar contato">
+                <input v-model="searchTerm" type="text" class="bg-transparent border-0 text-[14px] font-roboto w-[198px] outline-none" placeholder="Buscar contato">
             </div>
             <div class="flex items-center gap-[8px]">
                 <Button width="198px" label="Adicionar contato">
@@ -93,16 +110,29 @@ const handleCloseActions = (key: number) => {
                 <thead class="text-gray-600 border-b border-gray-100">
                 <tr>
                     <th class="px-4 py-2 text-left ths cursor-pointer" @click="sortBy('name')">
-                        Nome {{ sortColumn === 'name' ? (sortDirection === 'asc' ? '▲' : '▼') : '' }}
+                        <div class="flex items-center">
+                            Nome
+                            <MoveDown size="12" v-if="sortColumn === 'name' && sortDirection === 'asc'" />
+                            <MoveUp size="12" v-if="sortColumn === 'name' && sortDirection === 'desc'" />
+                        </div>
                     </th>
                     <th class="px-4 py-2 text-left ths cursor-pointer" @click="sortBy('email')">
-                        Email {{ sortColumn === 'email' ? (sortDirection === 'asc' ? '▲' : '▼') : '' }}
+                        <div class="flex items-center">
+                            E-mail
+                            <MoveDown size="12" v-if="sortColumn === 'email' && sortDirection === 'asc'" />
+                            <MoveUp size="12" v-if="sortColumn === 'email' && sortDirection === 'desc'" />
+                        </div>
                     </th>
                     <th class="px-4 py-2 text-left ths cursor-pointer" @click="sortBy('phone')">
-                        Telefone {{ sortColumn === 'phone' ? (sortDirection === 'asc' ? '▲' : '▼') : '' }}
+                        <div class="flex items-center">
+                            Telefone
+                            <MoveDown size="12" v-if="sortColumn === 'phone' && sortDirection === 'asc'" />
+                            <MoveUp size="12" v-if="sortColumn === 'phone' && sortDirection === 'desc'" />
+                        </div>
                     </th>
-                    <th class="px-4 py-2 text-center ths">Ações</th>
+                    <th class="px-4 py-2 text-center ths"></th>
                 </tr>
+
                 </thead>
                 <tbody class="min-h-[1000px]">
                 <tr v-for="contact in paginatedContacts" :key="contact.id" class="hover:bg-gray-50 h-[64px] max-h-[64px]"
