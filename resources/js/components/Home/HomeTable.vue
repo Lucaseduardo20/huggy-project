@@ -53,9 +53,8 @@ const changePage = (page: number) => {
 
 <template>
     <div class="w-full flex flex-col gap-8">
-        <!-- Barra de busca e botões -->
         <div class="flex justify-between">
-            <div class="w-[250px] h-[36px] rounded-[8px] border border-[#e1e1e1] bg-[#f8f8f8] flex items-center justify-around">
+            <div class="search-input w-[250px] h-[36px] rounded-[8px] border border-[#e1e1e1] bg-[#f8f8f8] flex items-center justify-around">
                 <Search />
                 <input type="text" class="bg-transparent border-0 text-[14px] font-roboto w-[198px] outline-none" placeholder="Buscar contato">
             </div>
@@ -90,7 +89,7 @@ const changePage = (page: number) => {
                 <tbody>
                 <tr v-for="contact in paginatedContacts" :key="contact.id" class="hover:bg-gray-50 h-[64px]">
                     <td class="px-4 table-data flex items-center space-x-2">
-                        <div class="w-8 h-8 rounded-full bg-gray-300 flex items-center justify-center text-white font-bold">
+                        <div class="w-8 h-8 rounded-full flex items-center justify-center text-[#180D6E] font-bold font-roboto">
                             {{ contact.avatar }}
                         </div>
                         <span>{{ contact.name }}</span>
@@ -149,16 +148,12 @@ const changePage = (page: number) => {
     letter-spacing: 0.4px;
 }
 
-/* Responsividade */
 @media (max-width: 768px) {
     .flex.justify-between {
         flex-direction: column;
         gap: 16px;
     }
 
-    .w-[250px] {
-    width: 100%;
-}
 
     .overflow-x-auto {
         overflow-x: auto;
@@ -166,6 +161,16 @@ const changePage = (page: number) => {
 
     table {
         min-width: 600px;
+    }
+}
+
+@media (max-width: 368px) {
+    .search-input {
+        width: 180px !important;
+
+        input {
+            width: 140px;
+        }
     }
 }
 </style>
