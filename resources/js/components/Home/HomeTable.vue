@@ -135,7 +135,7 @@ const filteredContacts = computed(() => {
 
                 </thead>
                 <tbody class="min-h-[1000px]">
-                <tr v-for="contact in paginatedContacts" :key="contact.id" class="hover:bg-gray-50 h-[64px] max-h-[64px]"
+                <tr v-if="!contacts.length > 0" v-for="contact in paginatedContacts" :key="contact.id" class="hover:bg-gray-50 h-[64px] max-h-[64px]"
                     @mouseenter="handleOpenActions(contact.id)"
                     @mouseleave="handleCloseActions(contact.id)"
                 >
@@ -155,6 +155,19 @@ const filteredContacts = computed(() => {
                             <button v-if="rowsState[contact.id]" class="text-gray-500 hover:text-red-500">
                                 <Trash />
                             </button>
+                        </div>
+                    </td>
+                </tr>
+                <tr v-else class=" w-full">
+                    <td colspan="4" class="w-full h-full">
+                        <div class="h-[500px] flex flex-col items-center justify-center gap-4">
+                            <img class="w-[200px] h-[200px]" src="../../../../public/assets/book.png">
+                            <span class="font-roboto text-[#757575]">Ainda não há contatos</span>
+                            <Button width="198px" label="Adicionar contato">
+                                <template v-slot:icon>
+                                    <Add />
+                                </template>
+                            </Button>
                         </div>
                     </td>
                 </tr>
