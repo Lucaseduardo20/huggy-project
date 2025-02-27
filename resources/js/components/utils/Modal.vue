@@ -1,5 +1,5 @@
 <script setup>
-import {defineProps} from 'vue'
+import {defineProps, watch} from 'vue'
     const props = defineProps({
         trigger: {
             type: Boolean,
@@ -8,18 +8,20 @@ import {defineProps} from 'vue'
         }
     })
 
-const emit = defineEmits(['update:trigger'])
+watch(() => props.trigger, (newVal) => {
+    if (newVal) {
+        document.body.style.overflow = 'hidden'
+    } else {
+        document.body.style.overflow = ''
+    }
+})
 
-const closeModal = () => {
-    emit('update:trigger', false)
-}
 </script>
 
 <template>
     <div
         v-if="trigger"
-        class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center"
-        @click="closeModal"
+        class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center overflow-y-scroll"
     >
         <slot name="content" />
     </div>

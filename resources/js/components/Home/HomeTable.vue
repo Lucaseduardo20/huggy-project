@@ -9,6 +9,7 @@ import Pencil from "../icons/Pencil.vue";
 import {MoveDown, MoveUp} from "lucide-vue-next";
 import Modal from '../utils/Modal.vue'
 import { VueFinalModal, useModal } from 'vue-final-modal'
+import AddClient from "./AddClient.vue";
 
 const contacts = ref([]);
 
@@ -84,7 +85,7 @@ const filteredContacts = computed(() => {
         <div class="flex justify-between">
             <div class="search-input w-[250px] h-[36px] rounded-[8px] border border-[#e1e1e1] bg-[#f8f8f8] flex items-center justify-around">
                 <Search />
-                <input v-model="searchTerm" type="text" class="bg-transparent border-0 text-[14px] font-roboto w-[198px] outline-none" placeholder="Buscar contato">
+                <input v-model="searchTerm" type="text" class="bg-transparent border-0 text-[14px] w-[198px] outline-none" placeholder="Buscar contato">
             </div>
             <div class="flex items-center gap-[8px]">
                 <Button @click="openAddModal()" width="198px" label="Adicionar contato">
@@ -155,8 +156,8 @@ const filteredContacts = computed(() => {
                     <td colspan="4" class="w-full h-full">
                         <div class="h-[500px] flex flex-col items-center justify-center gap-4">
                             <img class="w-[200px] h-[200px]" src="../../../../public/assets/book.png">
-                            <span class="font-roboto text-[#757575]">Ainda não há contatos</span>
-                            <Button width="198px" label="Adicionar contato">
+                            <span class=" text-[#757575]">Ainda não há contatos</span>
+                            <Button @click="openAddModal()" width="198px" label="Adicionar contato">
                                 <template v-slot:icon>
                                     <Add />
                                 </template>
@@ -178,7 +179,11 @@ const filteredContacts = computed(() => {
                 {{ page }}
             </button>
         </div>
-        <Modal v-model:trigger="isModalOpen" />
+        <Modal v-model:trigger="isModalOpen">
+            <template v-slot:content>
+                <AddClient @close="isModalOpen = false"/>
+            </template>
+        </Modal>
     </div>
 </template>
 
