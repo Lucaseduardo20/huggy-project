@@ -1,7 +1,14 @@
 import './bootstrap';
 import '../css/app.css';
 import {createApp} from "vue";
-import Login from "./pages/Login.vue";
+import App from "./App.vue";
+import router from "./router/index.ts";
+import VueGoodTablePlugin from 'vue-good-table';
 
-const app = createApp({})
-createApp(Login).mount('#app');
+// import the styles
+import 'vue-good-table/dist/vue-good-table.css'
+
+const app = createApp(App)
+    .use(router)
+    .use(VueGoodTablePlugin)
+    .mount('#app');

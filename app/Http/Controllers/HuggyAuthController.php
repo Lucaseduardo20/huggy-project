@@ -37,33 +37,24 @@ class HuggyAuthController extends Controller
         ]);
 
         if ($response->failed()) {
-            return redirect('/login')->withErrors(['auth' => 'Falha ao obter o token de acesso.']);
+            logger('deu pau no token' , ['response' => $response]);
+            return redirect('/')->withErrors(['auth' => 'Falha ao obter o token de acesso.']);
         }
 
         $tokens = $response->json();
         $accessToken = $tokens['access_token'];
         $refreshToken = $tokens['refresh_token'];
 
-        $userResponse = Http::withToken($accessToken)
-            ->get('https://api.huggy.app/v3/me');
-
-        if ($userResponse->failed()) {
-            return redirect('/login')->withErrors(['auth' => 'Falha ao obter dados do usuário.']);
-        }
-
-        $huggyUser = $userResponse->json();
-
         $user = User::updateOrCreate(
-            ['huggy_id' => $huggyUser['id']],
             [
-                'name' => $huggyUser['name'],
-                'email' => $huggyUser['email'] ?? null,
-                'huggy_access_token' => $accessToken,
-                'huggy_refresh_token' => $refreshToken,
+                'access_token' => $accessToken,
+                'refresh_token' => $refreshToken,
             ]
         );
 
+
         Auth::login($user);
+        dd('teóricamente deve ter criado usuário no banco e funcionou');
 
         return redirect('/dashboard');
     }

@@ -7,9 +7,11 @@
     <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
     <title>Huggy</title>
 
-    @vite('resources/js/app.js')
 </head>
 <body>
+    @vite('resources/js/app.js')
     <main class="h-full" id="app"></main>
+
+    <script src="{{ mix('/js/app.js') }}"></script>
 </body>
 </html>

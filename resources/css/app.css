@@ -5,6 +5,10 @@ body {
     background-color: #F8F8F8;
 }
 
+.transition-hover {
+    transition: .3s;
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
