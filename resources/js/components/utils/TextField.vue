@@ -33,7 +33,7 @@ const props = defineProps({
 const emit = defineEmits(["update:modelValue", "validation"]);
 
 const isSmallScreen = ref(window.innerWidth < 820);
-const isInvalid = ref(false); // Estado para controlar se o campo é inválido
+const isInvalid = ref(false);
 
 const updateScreenSize = () => {
     isSmallScreen.value = window.innerWidth < 820;

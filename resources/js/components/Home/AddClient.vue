@@ -4,6 +4,16 @@ import {SizeEnum} from "../../type/global.js";
 import TextField from "../utils/TextField.vue";
 import Button from "../utils/Button.vue";
 import {Client} from "../../type/client";
+import {store} from "../../service/services";
+import { toast } from 'vue3-toastify';
+import 'vue3-toastify/dist/index.css';
+
+const notify = (message, timer, type) => {
+    toast(message, {
+        type: type,
+        autoClose: timer,
+    });
+}
 
 const props = defineProps({
     modalTrigger: {
@@ -43,8 +53,32 @@ const states = [
     { value: "TO", label: "Tocantins" }
 ];
 
-const storeClient = () => {
-    console.log(formData.value);
+const validate = () => {
+    const requiredFields = [
+        { field: formData.value.name, message: 'O campo Nome é obrigatório.' },
+        { field: formData.value.email, message: 'O campo Email é obrigatório.' },
+        { field: formData.value.phone, message: 'O campo Celular é obrigatório.' },
+        { field: formData.value.address, message: 'O campo Endereço é obrigatório.' },
+        { field: formData.value.neighborhood, message: 'O campo Bairro é obrigatório.' },
+        { field: formData.value.state, message: 'O campo Estado é obrigatório.' }
+    ];
+
+    for (const requiredField of requiredFields) {
+        if (!requiredField.field) {
+            notify(requiredField.message, 2000, 'error');
+            return false;
+        }
+    }
+}
+
+const storeClient = async () => {
+    if(!validate()) return;
+    const response = await store(formData.value as Client);
+    if(response.status !== 201) {
+        return notify(response.data.message, 2000, 'error');
+    }
+    return notify('Contato adicionado com sucesso!', 2000, 'success');
+
 }
 
 const formData = ref<Client>({
@@ -78,7 +112,7 @@ const clearForm = () => {
         <div class="w-full flex flex-col gap-8 pb-3">
             <TextField :required="true" v-model="formData.name" placeholder="Nome Completo" label="Nome"></TextField>
             <TextField :required="true" v-model="formData.email" placeholder="Email" label="Email"></TextField>
-            <TextField :required="true" mask="(##) ####-####" v-model="formData.tel" :size="SizeEnum.sm" placeholder="Telefone" label="Telefone"></TextField>
+            <TextField mask="(##) ####-####" v-model="formData.tel" :size="SizeEnum.sm" placeholder="Telefone" label="Telefone"></TextField>
             <TextField :required="true" mask="(##) #####-####" v-model="formData.phone" :size="SizeEnum.sm" placeholder="Celular" label="Celular"></TextField>
             <TextField :required="true" v-model="formData.address" :size="SizeEnum.lg" placeholder="Endereço" label="Endereço"></TextField>
             <div class="w-3/5 flex gap-5 flex-col sm:flex-row">

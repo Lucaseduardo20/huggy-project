@@ -52,11 +52,14 @@ class HuggyAuthController extends Controller
             ]
         );
 
-
         Auth::login($user);
-        dd('teóricamente deve ter criado usuário no banco e funcionou');
 
-        return redirect('/dashboard');
+        $sanctumToken = $user->createToken('auth_token')->plainTextToken;
+
+        return response()->json([
+            'token' => $sanctumToken,
+            'message' => 'Usuário logado com sucesso!'
+        ], 200);
     }
 }
 
