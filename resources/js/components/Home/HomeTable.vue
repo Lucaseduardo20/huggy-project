@@ -10,7 +10,8 @@ import {MoveDown, MoveUp} from "lucide-vue-next";
 import Modal from '../utils/Modal.vue'
 import { VueFinalModal, useModal } from 'vue-final-modal'
 import AddClient from "./AddClient.vue";
-import {getClients} from "../../service/services";
+import {getClients} from "../../service/client";
+import {useRouter} from "vue-router";
 import { toast } from 'vue3-toastify';
 import 'vue3-toastify/dist/index.css';
 
@@ -20,6 +21,8 @@ const notify = (message, timer, type) => {
         autoClose: timer,
     });
 }
+
+const router = useRouter();
 
 const contacts = ref([]);
 
@@ -90,6 +93,10 @@ const filteredContacts = computed(() => {
     });
 });
 
+const goToDashboard = () => {
+    router.push('/dashboard');
+};
+
 const getData = async () => {
     const response = await getClients();
     if(!response.status !== 201){
@@ -119,7 +126,7 @@ onBeforeMount(() => {
                         <Add />
                     </template>
                 </Button>
-                <button class="insight-button flex items-center justify-center rounded-3xl transition-hover">
+                <button @click="goToDashboard" class="insight-button flex items-center justify-center rounded-3xl transition-hover">
                     <Insight />
                 </button>
             </div>

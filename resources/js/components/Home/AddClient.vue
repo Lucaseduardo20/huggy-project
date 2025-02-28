@@ -4,7 +4,7 @@ import {SizeEnum} from "../../type/global.js";
 import TextField from "../utils/TextField.vue";
 import Button from "../utils/Button.vue";
 import {Client} from "../../type/client";
-import {store} from "../../service/services";
+import {store} from "../../service/client";
 import { toast } from 'vue3-toastify';
 import 'vue3-toastify/dist/index.css';
 

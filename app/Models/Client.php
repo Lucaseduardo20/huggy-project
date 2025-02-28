@@ -21,5 +21,10 @@ class Client extends Model
         );
     }
 
+    public function users()
+    {
+        return $this->belongsToMany(User::class, 'client_user', 'client_id', 'user_id');
+    }
+
 
 }
