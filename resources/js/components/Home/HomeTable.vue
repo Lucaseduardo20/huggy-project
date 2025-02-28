@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue';
+import { ref, computed, onBeforeMount } from 'vue';
 import Search from "../icons/Search.vue";
 import Button from "../utils/Button.vue";
 import Add from "../icons/Add.vue";
@@ -10,6 +10,16 @@ import {MoveDown, MoveUp} from "lucide-vue-next";
 import Modal from '../utils/Modal.vue'
 import { VueFinalModal, useModal } from 'vue-final-modal'
 import AddClient from "./AddClient.vue";
+import {getClients} from "../../service/services";
+import { toast } from 'vue3-toastify';
+import 'vue3-toastify/dist/index.css';
+
+const notify = (message, timer, type) => {
+    toast(message, {
+        type: type,
+        autoClose: timer,
+    });
+}
 
 const contacts = ref([]);
 
@@ -22,6 +32,7 @@ const sortColumn = ref('name');
 const sortDirection = ref('asc');
 const searchTerm = ref('');
 const isModalOpen = ref(false);
+const loading = ref(true);
 
 const sortedContacts = computed(() => {
     return [...filteredContacts.value].sort((a, b) => {
@@ -78,6 +89,21 @@ const filteredContacts = computed(() => {
         );
     });
 });
+
+const getData = async () => {
+    const response = await getClients();
+    if(!response.status !== 201){
+        return notify('Erro ao buscar dados.', 2000, 'error');
+    }
+
+    contacts.value = response.data;
+    loading.value = false;
+}
+
+
+onBeforeMount(() => {
+    getData();
+})
 </script>
 
 <template>
@@ -156,7 +182,7 @@ const filteredContacts = computed(() => {
                     <td colspan="4" class="w-full h-full">
                         <div class="h-[500px] flex flex-col items-center justify-center gap-4">
                             <img class="w-[200px] h-[200px]" src="../../../../public/assets/book.png">
-                            <span class=" text-[#757575]">Ainda não há contatos</span>
+                            <span class=" text-[#757575]">{{`${loading ? 'Buscando dados...' : 'Ainda não há contatos'}`}}</span>
                             <Button @click="openAddModal()" width="198px" label="Adicionar contato">
                                 <template v-slot:icon>
                                     <Add />

@@ -10,3 +10,12 @@ export const store = async (client: Client) => {
         return err.response
     })
 }
+
+export const getClients = async () => {
+    return await api.get('/clients').then((res: AxiosResponse<any, any>) => {
+        return res.data
+    }).catch((err) => {
+        console.log(err.response);
+        return err.response
+    })
+}

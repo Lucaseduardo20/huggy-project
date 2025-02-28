@@ -30,7 +30,7 @@ const emit = defineEmits(['click']);
         @click="emit('click')"
     >
         <slot name="icon"></slot>
-        {{ label }}
+        <span>{{ label }}</span>
     </button>
 </template>
 
@@ -43,13 +43,14 @@ const emit = defineEmits(['click']);
     background-color: #321BDE;
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: center;
     font-weight: 500;
     font-size: 14px;
     font-family: 'Roboto', sans-serif;
     cursor: pointer;
     border: none;
     outline: none;
+    gap: 12px;
 }
 
 .button:hover {
