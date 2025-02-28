@@ -76,13 +76,13 @@ const clearForm = () => {
             <h2 class="text-[#262626] text-[20px]">Adicionar novo contato</h2>
         </div>
         <div class="w-full flex flex-col gap-8 pb-3">
-            <TextField v-model="formData.name" placeholder="Nome Completo" label="Nome"></TextField>
-            <TextField v-model="formData.email" placeholder="Email" label="Email"></TextField>
-            <TextField mask="(##) ####-####" v-model="formData.tel" :size="SizeEnum.sm" placeholder="Telefone" label="Telefone"></TextField>
-            <TextField mask="(##) #####-####" v-model="formData.phone" :size="SizeEnum.sm" placeholder="Celular" label="Celular"></TextField>
-            <TextField v-model="formData.address" :size="SizeEnum.lg" placeholder="Endereço" label="Endereço"></TextField>
+            <TextField :required="true" v-model="formData.name" placeholder="Nome Completo" label="Nome"></TextField>
+            <TextField :required="true" v-model="formData.email" placeholder="Email" label="Email"></TextField>
+            <TextField :required="true" mask="(##) ####-####" v-model="formData.tel" :size="SizeEnum.sm" placeholder="Telefone" label="Telefone"></TextField>
+            <TextField :required="true" mask="(##) #####-####" v-model="formData.phone" :size="SizeEnum.sm" placeholder="Celular" label="Celular"></TextField>
+            <TextField :required="true" v-model="formData.address" :size="SizeEnum.lg" placeholder="Endereço" label="Endereço"></TextField>
             <div class="w-3/5 flex gap-5 flex-col sm:flex-row">
-                <TextField v-model="formData.neighborhood" placeholder="Bairro" label="Bairro"></TextField>
+                <TextField :required="true" v-model="formData.neighborhood" placeholder="Bairro" label="Bairro"></TextField>
                 <div :style="{ width: SizeEnum.x_sm }" class="flex flex-col">
                     <label class="text-[12px] font-[#262626] font-medium">Estado</label>
                     <select
