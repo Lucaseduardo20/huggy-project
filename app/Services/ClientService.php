@@ -31,7 +31,6 @@ class ClientService
 
     public function createClient(ClientData $clientDTO): ClientResponseData
     {
-        logger('clientDTO', [$clientDTO]);
         $client = $this->clientRepository->create($clientDTO->toArray());
         return ClientResponseData::fromClient($client);
     }

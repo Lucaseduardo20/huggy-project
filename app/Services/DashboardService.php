@@ -18,6 +18,7 @@ class DashboardService
 
     public function getClientByCity()
     {
+
         return auth()->user()->clients()
             ->select('city', DB::raw('COUNT(*) AS total'))
             ->whereNotNull('city')

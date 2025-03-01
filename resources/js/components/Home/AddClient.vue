@@ -51,6 +51,9 @@ const storeClient = async () => {
     if(response.status !== 201) {
         return notify(response.data.message, 2000, 'error');
     }
+    emit('close');
+    clearForm();
+    window.location.reload();
     return notify('Contato adicionado com sucesso!', 2000, 'success');
 
 }

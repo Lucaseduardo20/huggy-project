@@ -24,6 +24,13 @@ class ClientRepository
 
     public function create(array $data): Client
     {
+//        $client = new Client();
+//        $client->name = $data['name'];
+//        $client->email = $data['email'];
+//        $client->phone = $data['phone'];
+//        $client->birthday = $data['birthday'];
+//        $client->state = $data['state'];
+//        $client->city = $data['city'];
         return Client::create($data);
     }
 

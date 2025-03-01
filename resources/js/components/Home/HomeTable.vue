@@ -99,7 +99,7 @@ const goToDashboard = () => {
 
 const getData = async () => {
     const response = await getClients();
-    if(!response.status !== 201){
+    if(response.status !== 200){
         return notify('Erro ao buscar dados.', 2000, 'error');
     }
 
