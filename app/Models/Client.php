@@ -12,19 +12,18 @@ class Client extends Model
         'email',
         'phone',
         'huggy_id',
+        'user_id'
     ];
 
     public function fPhone(): Attribute
     {
         return Attribute::make(
-            get: formatPhoneNumber($this->phone)
+            get: fn () => formatPhoneNumber($this->phone)
         );
     }
 
-    public function users()
+    public function user()
     {
-        return $this->belongsToMany(User::class, 'client_user', 'client_id', 'user_id');
+        return $this->belongsTo(User::class, 'user_id');
     }
-
-
 }

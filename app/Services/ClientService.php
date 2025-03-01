@@ -7,6 +7,7 @@ namespace App\Services;
 use App\Repositories\ClientRepository;
 use App\Data\ClientData;
 use App\Models\Client;
+use App\Data\ClientResponseData;
 
 class ClientService
 {
@@ -22,19 +23,20 @@ class ClientService
         );
     }
 
-    public function getClientById(int $id): ?ClientData
+    public function getClientById(int $id): ?ClientResponseData
     {
         $client = $this->clientRepository->findById($id);
-        return $client ? ClientData::fromClient($client) : null;
+        return $client ? ClientResponseData::fromClient($client) : null;
     }
 
-    public function createClient(ClientData $clientDTO): ClientData
+    public function createClient(ClientData $clientDTO): ClientResponseData
     {
+        logger('clientDTO', [$clientDTO]);
         $client = $this->clientRepository->create($clientDTO->toArray());
-        return ClientData::fromClient($client);
+        return ClientResponseData::fromClient($client);
     }
 
-    public function updateClient(int $id, ClientData $clientDTO): ?ClientData
+    public function updateClient(int $id, ClientData $clientDTO): ?ClientResponseData
     {
         $client = $this->clientRepository->findById($id);
         if (!$client) {
@@ -42,7 +44,7 @@ class ClientService
         }
 
         $updatedClient = $this->clientRepository->update($client, $clientDTO->toArray());
-        return ClientData::fromClient($updatedClient);
+        return ClientResponseData::fromClient($updatedClient);
     }
 
     public function deleteClient(int $id): bool

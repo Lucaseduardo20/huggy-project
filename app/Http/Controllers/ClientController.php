@@ -26,14 +26,18 @@ class ClientController extends Controller
             : response()->json(['message' => 'Cliente não encontrado'], 404);
     }
 
-    public function store(ClientData $clientDTO): JsonResponse
+    public function store(Request $request): JsonResponse
     {
-        return response()->json($this->clientService->createClient($clientDTO), 201);
+
+        return response()->json(
+            $this->clientService->createClient(ClientData::fromRequest($request->all())),
+            201);
     }
 
-    public function update(ClientData $clientDTO, int $id): JsonResponse
+    public function update(Request $request, int $id): JsonResponse
     {
-        $client = $this->clientService->updateClient($id, $clientDTO);
+        $client = $this->clientService->updateClient($id,
+            ClientData::fromRequest($request->all()));
         return $client
             ? response()->json($client)
             : response()->json(['message' => 'Cliente não encontrado'], 404);

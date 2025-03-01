@@ -4,6 +4,7 @@ export type Client = {
     tel?: string,
     phone: string,
     address: string,
-    neighborhood: string,
+    city: string,
+    birthday: string,
     state: string
 }
