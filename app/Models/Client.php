@@ -36,6 +36,23 @@ class Client extends Model
         );
     }
 
+    public function avatar(): Attribute
+    {
+        return Attribute::make(
+            get: function () {
+                $names = explode(' ', trim($this->name));
+
+                if (count($names) === 1) {
+                    return strtoupper(mb_substr($names[0], 0, 2));
+                }
+
+                $firstInitial = strtoupper(mb_substr($names[0], 0, 1));
+                $lastInitial = strtoupper(mb_substr(end($names), 0, 1));
+
+                return $firstInitial . $lastInitial;
+            }
+        );
+    }
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id');

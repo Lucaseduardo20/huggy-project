@@ -18,6 +18,8 @@ class ClientData extends Data
     public function __construct(
         public readonly ?int $id,
 
+        public ?string $avatar,
+
         public ?int $user_id,
 
         #[Required, StringType, Max(100)]
@@ -52,6 +54,7 @@ class ClientData extends Data
     {
         return new self(
             id: $client->id,
+            avatar: $client->avatar,
             user_id: $client->user_id,
             name: $client->name,
             email: $client->email,
@@ -67,6 +70,7 @@ class ClientData extends Data
     {
         return new self(
             id: $data['id'] ?? null,
+            avatar: null,
             user_id: Auth::id(),
             name: $data['name'],
             email: $data['email'] ?? null,

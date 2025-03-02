@@ -213,7 +213,7 @@ onBeforeMount(() => {
                     @mouseleave="handleCloseActions(contact.id)"
                 >
                     <td @click="openViewModal(contact)"  class="px-4 table-data flex items-center space-x-2">
-                        <div class="w-8 h-8 rounded-full flex items-center justify-center text-[#180D6E] font-bold font-roboto">
+                        <div class="w-8 bg-gray-100 h-8 rounded-full flex items-center justify-center text-[#180D6E] font-bold font-roboto">
                             {{ contact.avatar }}
                         </div>
                         <span>{{ contact.name }}</span>
@@ -288,8 +288,8 @@ onBeforeMount(() => {
                         <X></X>
                     </button>
                     <div class="h-1/4 border-b flex flex-col items-center gap-3 md:flex-row md:w-full  md:justify-around">
-                        <div class="w-9 h-8 rounded-full flex items-center justify-center text-[#180D6E] font-bold font-roboto bg-gray-200">
-                            {{ 'LM' }}
+                        <div class="w-8 h-8 rounded-full flex items-center justify-center text-[#180D6E] font-bold font-roboto bg-gray-100">
+                            {{ viewingClient.avatar }}
                         </div>
                         <h4 class="font-roboto font-bold">{{viewingClient.name}}</h4>
                         <div class="w-full h-full flex justify-center gap-5 md:w-[100px]">
