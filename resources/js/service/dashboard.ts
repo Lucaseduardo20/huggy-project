@@ -1,15 +1,7 @@
 import {api} from "./api";
 
-export const clientsByAge = async () => {
-    return api.get('/dashboard/age').then((res) => {
-        return res;
-    }).catch((err) => {
-        return err;
-    })
-}
-
-export const clientsByCity = async () => {
-    return api.get('/dashboard/city').then((res) => {
+export const getDashboard = async () => {
+    return api.get('/dashboard/data').then((res) => {
         return res;
     }).catch((err) => {
         return err;

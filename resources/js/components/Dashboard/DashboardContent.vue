@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from "vue";
 import Chart from "../utils/Chart.vue";
-import {clientsByAge, clientsByCity} from "../../service/dashboard";
+import {clientsByAge, clientsByCity, getDashboard} from "../../service/dashboard";
 import {toast} from "vue3-toastify";
 
 const customersByCity = ref<{ city: string; total: number }[]>([]);
+const customersByState = ref<{ state: string; total: number }[]>([]);
 const customersByAge = ref<{ age_group: string; total: number }[]>([]);
 const selectedCity = ref("");
 const loading = ref(true);
@@ -16,26 +17,39 @@ const notify = (message, timer, type) => {
     });
 }
 
-const fetchClientsByCity = async () => {
-    return await clientsByCity().then((res) => {
-        customersByCity.value = res.data;
-    }).catch((err) => {
-        notify('Erro ao buscar dados.', 2000, 'error')
-    })
-}
-
-const fetchClientsByAge = async () => {
-    return await clientsByAge().then((res) => {
-        customersByAge.value = res.data;
-    }).catch((err) => {
-        notify('Erro ao buscar dados.', 2000, 'error')
-    })
-}
+// const fetchClientsByState = async () => {
+//     return await clientsByCity().then((res) => {
+//         customersByState.value = res.data;
+//     }).catch((err) => {
+//         notify('Erro ao buscar dados.', 2000, 'error')
+//     })
+// }
+//
+// const fetchClientsByCity = async () => {
+//     return await clientsByCity().then((res) => {
+//         customersByCity.value = res.data;
+//     }).catch((err) => {
+//         notify('Erro ao buscar dados.', 2000, 'error')
+//     })
+// }
+//
+// const fetchClientsByAge = async () => {
+//     return await clientsByAge().then((res) => {
+//         customersByAge.value = res.data;
+//     }).catch((err) => {
+//         notify('Erro ao buscar dados.', 2000, 'error')
+//     })
+// }
 
 const fetchData = async () => {
-    await fetchClientsByCity();
-    await fetchClientsByAge();
-    loading.value = false;
+    return await getDashboard().then((res) => {
+        customersByAge.value = res.data.age;
+        customersByState.value = res.data.state;
+        customersByCity.value = res.data.city;
+        loading.value = false;
+    }).catch((err) => {
+        notify('Erro ao buscar dados.', 2000, 'error')
+    })
 };
 
 onMounted(fetchData);
@@ -52,6 +66,19 @@ const cityChartOptions = computed(() => ({
 }));
 
 const cityChartSeries = computed(() => customersByCity.value.map(item => item.total));
+
+const stateChartOptions = computed(() => ({
+    chart: { type: "pie" },
+    labels: customersByState.value.map(item => item.state),
+    colors: ["#2715B0", "#180D6E", "#5946E4", "#7E6FEA", "#BDB5F4"],
+    tooltip: { y: { formatter: (val: number) => `${val} clientes` } },
+    dataLabels:{enabled: false},
+    stroke: {
+        show: false
+    }
+}));
+
+const stateChartSeries = computed(() => customersByState.value.map(item => item.total));
 
 const ageChartOptions = computed(() => ({
     chart: { type: "pie" },
@@ -73,6 +100,7 @@ const averagePerCity = computed(() => (customersByCity.value.length ? (totalCust
 <template>
     <div class="container">
         <div class="flex flex-col md:grid grid-cols-2 gap-4 w-full h-full ">
+            <Chart :loading="loading" title="Segmentação por Estado" :options="stateChartOptions" :series="stateChartSeries" height="200px" />
             <Chart :loading="loading" title="Segmentação por Cidade" :options="cityChartOptions" :series="cityChartSeries" height="200px" />
             <Chart :loading="loading" title="Segmentação por Idade" :options="ageChartOptions" :series="ageChartSeries" height="200px" />
         </div>

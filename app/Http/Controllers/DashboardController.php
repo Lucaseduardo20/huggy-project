@@ -12,13 +12,15 @@ class DashboardController extends Controller
     public function __construct(
         protected DashboardService $service
     ) {}
-    public function clientByAge(): JsonResponse
-    {
-        return response()->json($this->service->getClientByAge());
-    }
 
-    public function clientByCity(): JsonResponse
+    public function getDashboardData(): JsonResponse
     {
-        return response()->json($this->service->getClientByCity());
+        $data = [
+            'age' => $this->service->getClientByAge(),
+            'city' => $this->service->getClientByCity(),
+            'state' => $this->service->getClientByState()
+        ];
+
+        return response()->json($data, 200);
     }
 }

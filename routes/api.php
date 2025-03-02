@@ -8,8 +8,7 @@ use App\Http\Controllers\HuggyAuthController;
 Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('clients', ClientController::class);
     Route::group(['prefix' =>'dashboard'], function () {
-        Route::get('/age', [DashboardController::class, 'clientByAge']);
-        Route::get('/city', [DashboardController::class, 'clientByCity']);
+        Route::get('/data', [DashboardController::class, 'getDashboardData']);
     });
 });
 
