@@ -16,6 +16,7 @@ import { toast } from 'vue3-toastify';
 import 'vue3-toastify/dist/index.css';
 import EditClient from "./EditClient.vue";
 import {Client} from "../../type/client";
+import X from '../icons/X.vue'
 
 const notify = (message, timer, type) => {
     toast(message, {
@@ -42,6 +43,7 @@ const deleteClientModal = ref(false);
 const editingClient = ref({});
 const deletingClient = ref({});
 const viewClientModal = ref(false);
+const viewingClient = ref({});
 const loading = ref(true);
 
 const sortedContacts = computed(() => {
@@ -57,6 +59,16 @@ const sortedContacts = computed(() => {
 const openEditModal = (client) => {
     editClientModal.value = true;
     editingClient.value = client;
+}
+
+const viewEdit = (client: Client) => {
+    viewClientModal.value = false
+    openEditModal(client);
+}
+
+const viewDelete = (client) => {
+    viewClientModal.value = false;
+    openDeleteModal(client);
 }
 
 const openAddModal = () => {
@@ -115,7 +127,8 @@ const openDeleteModal = (client: Client) => {
 }
 
 const openViewModal = (client) => {
-    
+    viewingClient.value = client;
+    viewClientModal.value = true;
 }
 
 const remove = async () => {
@@ -195,18 +208,18 @@ onBeforeMount(() => {
 
                 </thead>
                 <tbody class="min-h-[1000px]">
-                <tr @click="openViewModal" v-if="contacts.length > 0" v-for="contact in paginatedContacts" :key="contact.id" class="hover:bg-gray-50 h-[64px] max-h-[64px]"
+                <tr v-if="contacts.length > 0" v-for="contact in paginatedContacts" :key="contact.id" class="hover:bg-gray-50 h-[64px] max-h-[64px]"
                     @mouseenter="handleOpenActions(contact.id)"
                     @mouseleave="handleCloseActions(contact.id)"
                 >
-                    <td class="px-4 table-data flex items-center space-x-2">
+                    <td @click="openViewModal(contact)"  class="px-4 table-data flex items-center space-x-2">
                         <div class="w-8 h-8 rounded-full flex items-center justify-center text-[#180D6E] font-bold font-roboto">
                             {{ contact.avatar }}
                         </div>
                         <span>{{ contact.name }}</span>
                     </td>
-                    <td class="px-4 table-data">{{ contact.email || '-' }}</td>
-                    <td class="px-4 table-data">{{ contact.phone || '-' }}</td>
+                    <td @click="openViewModal(contact)"  class="px-4 table-data">{{ contact.email || '-' }}</td>
+                    <td @click="openViewModal(contact)"  class="px-4 table-data">{{ contact.phone || '-' }}</td>
                     <td class="px-4 table-data space-x-2 min-w-[83px]">
                         <div class="w-full h-full flex justify-center gap-1.5">
                             <button @click="openEditModal(contact)" v-if="rowsState[contact.id]" class="text-gray-500">
@@ -270,8 +283,46 @@ onBeforeMount(() => {
         </Modal>
         <Modal v-model:trigger="viewClientModal">
             <template v-slot:content>
-                <div class="bg-white w-[300px] h-[420px] md:w-[610px] md:h-[312px]">
-
+                <div class="relative rounded-2xl bg-white p-2 w-[300px] h-[420px] md:w-[610px] md:h-[312px]">
+                    <button @click="viewClientModal = false" class="absolute right-1">
+                        <X></X>
+                    </button>
+                    <div class="h-1/4 border-b flex flex-col items-center gap-3 md:flex-row md:w-full  md:justify-around">
+                        <div class="w-9 h-8 rounded-full flex items-center justify-center text-[#180D6E] font-bold font-roboto bg-gray-200">
+                            {{ 'LM' }}
+                        </div>
+                        <h4 class="font-roboto font-bold">{{viewingClient.name}}</h4>
+                        <div class="w-full h-full flex justify-center gap-5 md:w-[100px]">
+                            <button @click="viewEdit(viewingClient)" class="text-gray-500">
+                                <Pencil />
+                            </button>
+                            <button @click="viewDelete(viewingClient)" class="text-gray-500">
+                                <Trash />
+                            </button>
+                        </div>
+                    </div>
+                    <div class="h-3/4 flex flex-col w-full items-center justify-evenly">
+                        <div class="flex items-center gap-4 w-[270px] md:w-[500px]">
+                            <span class="text-[12px] text-[#757575] w-2/6 md:w-1/6">Email: </span>
+                            <span class="text-[14px] text-[#262626] text-center w-au md:text-leftto">{{viewingClient.email}}</span>
+                        </div>
+                        <div class="flex items-center gap-4 w-[270px] md:w-[500px]">
+                            <span class="text-[12px] text-[#757575] w-2/6 md:w-1/6">Endereço: </span>
+                            <span class="text-[14px] text-[#262626] text-center w-auto md:text-left">{{viewingClient.address}}</span>
+                        </div>
+                        <div class="flex items-center gap-4 w-[270px] md:w-[500px]">
+                            <span class="text-[12px] text-[#757575] w-2/6 md:w-1/6">Data de Nascimento: </span>
+                            <span class="text-[14px] text-[#262626] text-center w-auto md:text-left">{{viewingClient.birthday}}</span>
+                        </div>
+                        <div class="flex items-center gap-4 w-[270px] md:w-[500px]">
+                            <span class="text-[12px] text-[#757575] w-2/6 md:w-1/6">Estado: </span>
+                            <span class="text-[14px] text-[#262626] text-center w-aut md:text-lefto">{{viewingClient.state}}</span>
+                        </div>
+                        <div class="flex items-center gap-4 w-[270px] md:w-[500px]">
+                            <span class="text-[12px] text-[#757575] w-2/6 md:w-1/6">Cidade: </span>
+                            <span class="text-[14px] text-[#262626] text-center w-aut md:text-lefto">{{viewingClient.city}}</span>
+                        </div>
+                    </div>
                 </div>
             </template>
         </Modal>
