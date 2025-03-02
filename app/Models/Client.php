@@ -8,11 +8,14 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 class Client extends Model
 {
     protected $fillable = [
+        'user_id',
         'name',
         'email',
         'phone',
-        'huggy_id',
-        'user_id'
+        'birthday',
+        'state',
+        'city',
+        'address',
     ];
 
     public function fPhone(): Attribute

@@ -73,7 +73,7 @@ class ClientData extends Data
             phone: $data['phone'] ?? null,
             state: $data['state'] ?? null,
             city: $data['city'] ?? null,
-            birthday: $data['birthday'] ?? null,
+            birthday: convertDateFormat($data['birthday']) ?? null,
             address: $data['address'] ?? null
         );
     }

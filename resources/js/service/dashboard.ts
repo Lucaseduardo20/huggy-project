@@ -2,7 +2,7 @@ import {api} from "./api";
 
 export const clientsByAge = async () => {
     return api.get('/dashboard/age').then((res) => {
-        return res.data;
+        return res;
     }).catch((err) => {
         return err;
     })
@@ -10,7 +10,7 @@ export const clientsByAge = async () => {
 
 export const clientsByCity = async () => {
     return api.get('/dashboard/city').then((res) => {
-        return res.data;
+        return res;
     }).catch((err) => {
         return err;
     })

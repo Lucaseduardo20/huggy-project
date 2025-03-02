@@ -11,3 +11,13 @@ function formatPhoneNumber($phoneNumber) {
         return $phoneNumber;
     }
 }
+
+function convertDateFormat(?string $date): ?string
+{
+    if (!$date) {
+        return null;
+    }
+
+    $dateObj = \DateTime::createFromFormat('d/m/Y', $date);
+    return $dateObj ? $dateObj->format('Y-m-d') : null;
+}
