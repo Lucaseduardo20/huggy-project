@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 
@@ -22,6 +23,14 @@ class Client extends Model
     {
         return Attribute::make(
             get: fn () => formatPhoneNumber($this->phone)
+        );
+    }
+
+    public function fBirthday(): Attribute
+    {
+        return Attribute::make(
+            get: fn () =>
+                Carbon::parse($this->birthday)->format('d/m/Y')
         );
     }
 

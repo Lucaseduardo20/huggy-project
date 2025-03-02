@@ -10,10 +10,12 @@ import {MoveDown, MoveUp} from "lucide-vue-next";
 import Modal from '../utils/Modal.vue'
 import { VueFinalModal, useModal } from 'vue-final-modal'
 import AddClient from "./AddClient.vue";
-import {getClients} from "../../service/client";
+import {deleteClient, getClients} from "../../service/client";
 import {useRouter} from "vue-router";
 import { toast } from 'vue3-toastify';
 import 'vue3-toastify/dist/index.css';
+import EditClient from "./EditClient.vue";
+import {Client} from "../../type/client";
 
 const notify = (message, timer, type) => {
     toast(message, {
@@ -34,7 +36,10 @@ const itemsPerPage = ref(10);
 const sortColumn = ref('name');
 const sortDirection = ref('asc');
 const searchTerm = ref('');
-const isModalOpen = ref(false);
+const addClientModal = ref(false);
+const editClientModal = ref(false);
+const deleteClientModal = ref(false);
+const editingClient = ref({})
 const loading = ref(true);
 
 const sortedContacts = computed(() => {
@@ -47,8 +52,13 @@ const sortedContacts = computed(() => {
     });
 });
 
+const openEditModal = (client) => {
+    editClientModal.value = true;
+    editingClient.value = client;
+}
+
 const openAddModal = () => {
-    isModalOpen.value = true;
+    addClientModal.value = true;
 }
 
 const sortBy = (column: string) => {
@@ -96,6 +106,18 @@ const filteredContacts = computed(() => {
 const goToDashboard = () => {
     router.push('/dashboard');
 };
+
+const del = (client: Client) => {
+    deleteClientModal.value = true;
+}
+
+const delete = async (id) => {
+    return await deleteClient(id).then((res) => {
+        notify(res.data.message, 2000, 'info')
+    }).catch((error) => {
+        notify(error.message, 2000, 'info')
+    })
+}
 
 const getData = async () => {
     const response = await getClients();
@@ -176,7 +198,7 @@ onBeforeMount(() => {
                     <td class="px-4 table-data">{{ contact.phone || '-' }}</td>
                     <td class="px-4 table-data space-x-2 min-w-[83px]">
                         <div class="w-full h-full flex justify-center gap-1.5">
-                            <button v-if="rowsState[contact.id]" class="text-gray-500">
+                            <button @click="openEditModal(contact)" v-if="rowsState[contact.id]" class="text-gray-500">
                                 <Pencil />
                             </button>
                             <button v-if="rowsState[contact.id]" class="text-gray-500 hover:text-red-500">
@@ -212,9 +234,14 @@ onBeforeMount(() => {
                 {{ page }}
             </button>
         </div>
-        <Modal v-model:trigger="isModalOpen">
+        <Modal v-model:trigger="addClientModal">
             <template v-slot:content>
-                <AddClient @close="isModalOpen = false"/>
+                <AddClient @close="addClientModal = false"/>
+            </template>
+        </Modal>
+        <Modal v-model:trigger="editClientModal">
+            <template v-slot:content>
+                <EditClient :client-editing="editingClient" @close="editClientModal = false"/>
             </template>
         </Modal>
     </div>

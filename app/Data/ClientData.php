@@ -58,7 +58,7 @@ class ClientData extends Data
             phone: $client->f_phone,
             state: $client->state,
             city: $client->city,
-            birthday: $client->birthday,
+            birthday: $client->f_birthday,
             address: $client->address
         );
     }

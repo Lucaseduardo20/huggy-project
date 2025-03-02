@@ -4,7 +4,7 @@ import {SizeEnum} from "../../type/global.js";
 import TextField from "../utils/TextField.vue";
 import Button from "../utils/Button.vue";
 import {Client} from "../../type/client";
-import {store} from "../../service/client";
+import {store, update} from "../../service/client";
 import { toast } from 'vue3-toastify';
 import 'vue3-toastify/dist/index.css';
 import jsonData from '../../json/brazil.json'
@@ -19,6 +19,8 @@ const notify = (message, timer, type) => {
 const props = defineProps({
     modalTrigger: {
         type: Boolean
+    },
+    clientEditing: {
     }
 })
 
@@ -45,10 +47,10 @@ const validate = () => {
     return true;
 }
 
-const storeClient = async () => {
+const updateClient = async () => {
     if(!validate()) return;
-    const response = await store(formData.value as Client);
-    if(response.status !== 201) {
+    const response = await update(formData.value as Client, props.clientEditing.id);
+    if(response.status !== 200) {
         return notify(response.data.message, 2000, 'error');
     }
     emit('close');
@@ -56,7 +58,7 @@ const storeClient = async () => {
     setTimeout(() => {
         window.location.reload();
     }, 2000)
-    return notify('Contato adicionado com sucesso!', 2000, 'success');
+    return notify('Contato atualizado com sucesso!', 2000, 'success');
 
 }
 const cities = computed(() => {
@@ -82,6 +84,10 @@ const formData = ref<Client>({
     state: ''
 });
 
+const setForm = () => {
+    formData.value = props.clientEditing;
+}
+
 const clearForm = () => {
     formData.value = {
         name: '',
@@ -93,12 +99,14 @@ const clearForm = () => {
         state: ''
     };
 };
+
+onMounted(setForm)
 </script>
 
 <template>
     <div class="w-7/12 bg-white rounded-md p-3 my-5 min-w-[300px]">
         <div class="w-full h-[76px] border-b border-gray-200 flex items-center">
-            <h2 class="text-[#262626] text-[20px]">Adicionar novo contato</h2>
+            <h2 class="text-[#262626] text-[20px]">Editar Contato</h2>
         </div>
         <div class="w-full flex flex-col gap-8 pb-3">
             <TextField :required="true" v-model="formData.name" placeholder="Nome Completo" label="Nome"></TextField>
@@ -144,7 +152,7 @@ const clearForm = () => {
             </button>
             <button
                 class="w-[70px] h-[36px] bg-[#321BDE] text-white rounded-xl hover:bg-blue-950 transition-hover font-medium"
-                @click="storeClient"
+                @click="updateClient"
             >
                 Salvar
             </button>
