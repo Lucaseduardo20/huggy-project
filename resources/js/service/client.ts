@@ -20,7 +20,7 @@ export const update = async (client: Client, id: number) => {
     })
 }
 export const deleteClient = async (id: number) => {
-    return await api.delete(`/clients/${id}`, client).then((res: AxiosResponse<any, any>) => {
+    return await api.delete(`/clients/${id}`).then((res: AxiosResponse<any, any>) => {
         return res
     }).catch((err) => {
         console.log(err.response);

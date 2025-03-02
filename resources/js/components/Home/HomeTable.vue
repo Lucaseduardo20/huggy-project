@@ -39,7 +39,9 @@ const searchTerm = ref('');
 const addClientModal = ref(false);
 const editClientModal = ref(false);
 const deleteClientModal = ref(false);
-const editingClient = ref({})
+const editingClient = ref({});
+const deletingClient = ref({});
+const viewClientModal = ref(false);
 const loading = ref(true);
 
 const sortedContacts = computed(() => {
@@ -107,13 +109,22 @@ const goToDashboard = () => {
     router.push('/dashboard');
 };
 
-const del = (client: Client) => {
+const openDeleteModal = (client: Client) => {
+    deletingClient.value = client;
     deleteClientModal.value = true;
 }
 
-const delete = async (id) => {
-    return await deleteClient(id).then((res) => {
+const openViewModal = (client) => {
+    
+}
+
+const remove = async () => {
+    return await deleteClient(deletingClient.value.id).then((res) => {
+        deleteClientModal.value = false;
         notify(res.data.message, 2000, 'info')
+        setTimeout(() => {
+            window.location.reload();
+        }, 2000)
     }).catch((error) => {
         notify(error.message, 2000, 'info')
     })
@@ -184,7 +195,7 @@ onBeforeMount(() => {
 
                 </thead>
                 <tbody class="min-h-[1000px]">
-                <tr v-if="contacts.length > 0" v-for="contact in paginatedContacts" :key="contact.id" class="hover:bg-gray-50 h-[64px] max-h-[64px]"
+                <tr @click="openViewModal" v-if="contacts.length > 0" v-for="contact in paginatedContacts" :key="contact.id" class="hover:bg-gray-50 h-[64px] max-h-[64px]"
                     @mouseenter="handleOpenActions(contact.id)"
                     @mouseleave="handleCloseActions(contact.id)"
                 >
@@ -201,7 +212,7 @@ onBeforeMount(() => {
                             <button @click="openEditModal(contact)" v-if="rowsState[contact.id]" class="text-gray-500">
                                 <Pencil />
                             </button>
-                            <button v-if="rowsState[contact.id]" class="text-gray-500 hover:text-red-500">
+                            <button @click="openDeleteModal(contact)" v-if="rowsState[contact.id]" class="text-gray-500 hover:text-red-500">
                                 <Trash />
                             </button>
                         </div>
@@ -242,6 +253,26 @@ onBeforeMount(() => {
         <Modal v-model:trigger="editClientModal">
             <template v-slot:content>
                 <EditClient :client-editing="editingClient" @close="editClientModal = false"/>
+            </template>
+        </Modal>
+        <Modal v-model:trigger="deleteClientModal">
+            <template v-slot:content>
+                <div class="bg-white w-[360px] h-[144px] rounded-2xl p-5">
+                    <div class="w-full h-1/2 flex items-center">
+                        <h2>Excluir este contato?</h2>
+                    </div>
+                    <div class="w-full h-1/2 flex items-end justify-end">
+                        <button @click="deleteClientModal = false" class="w-[89px] h-[36px] rounded-xl hover:bg-gray-200 transition-hover text-[#505050]">Cancelar</button>
+                        <button @click="remove()" class="w-[74px] h-[36px] rounded-xl hover:bg-gray-200 transition-hover text-[#DE321B]">Excluir</button>
+                    </div>
+                </div>
+            </template>
+        </Modal>
+        <Modal v-model:trigger="viewClientModal">
+            <template v-slot:content>
+                <div class="bg-white w-[300px] h-[420px] md:w-[610px] md:h-[312px]">
+
+                </div>
             </template>
         </Modal>
     </div>
