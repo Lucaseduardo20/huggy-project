@@ -6,11 +6,11 @@ import Add from "../icons/Add.vue";
 import Insight from "../icons/Insight.vue";
 import Trash from '../icons/Trash.vue'
 import Pencil from "../icons/Pencil.vue";
-import {MoveDown, MoveUp} from "lucide-vue-next";
+import {MoveDown, MoveUp, PhoneCall} from "lucide-vue-next";
 import Modal from '../utils/Modal.vue'
 import { VueFinalModal, useModal } from 'vue-final-modal'
 import AddClient from "./AddClient.vue";
-import {deleteClient, getClients} from "../../service/client";
+import {call, deleteClient, getClients} from "../../service/client";
 import {useRouter} from "vue-router";
 import { toast } from 'vue3-toastify';
 import 'vue3-toastify/dist/index.css';
@@ -89,6 +89,14 @@ const paginatedContacts = computed(() => {
     const end = start + itemsPerPage.value;
     return sortedContacts.value.slice(start, end);
 });
+
+const sendClientCall = async (client: Client) => {
+    return await call(client.phone).then((res) => {
+        notify('Chamada realizada com sucesso', 2000, 'success');
+    }).catch((error) => {
+        notify('Não foi possível realizar a chamada, entre em contato com o suporte', 2000, 'error');
+    })
+}
 
 const changePage = (page: number) => {
     currentPage.value = page;
@@ -220,13 +228,16 @@ onBeforeMount(() => {
                     </td>
                     <td @click="openViewModal(contact)"  class="px-4 table-data">{{ contact.email || '-' }}</td>
                     <td @click="openViewModal(contact)"  class="px-4 table-data">{{ contact.phone || '-' }}</td>
-                    <td class="px-4 table-data space-x-2 min-w-[83px]">
+                    <td class="px-4 table-data space-x-2 min-w-[100px]">
                         <div class="w-full h-full flex justify-center gap-1.5">
                             <button @click="openEditModal(contact)" v-if="rowsState[contact.id]" class="text-gray-500">
                                 <Pencil />
                             </button>
                             <button @click="openDeleteModal(contact)" v-if="rowsState[contact.id]" class="text-gray-500 hover:text-red-500">
                                 <Trash />
+                            </button>
+                            <button @click="sendClientCall(contact)" v-if="rowsState[contact.id]" class="text-gray-500 hover:text-red-500">
+                                <PhoneCall size="16" hover="" />
                             </button>
                         </div>
                     </td>

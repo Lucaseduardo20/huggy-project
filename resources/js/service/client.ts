@@ -36,3 +36,12 @@ export const getClients = async () => {
         return err.response
     })
 }
+
+export const call = async (to: string) => {
+    return await api.post('/twilio/call', {to: to}).then((res: AxiosResponse<any, any>) => {
+        return res
+    }).catch((err) => {
+        console.log(err.response);
+        return err.response
+    })
+}
