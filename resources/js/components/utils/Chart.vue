@@ -11,12 +11,6 @@ const props = defineProps<{
 }>();
 
 const chart = shallowRef(null);
-
-// watch(() => props.series, () => {
-//     if (chart.value) {
-//         chart.value.updateSeries(props.series);
-//     }
-// });
 </script>
 
 <template>

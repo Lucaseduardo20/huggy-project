@@ -16,31 +16,6 @@ const notify = (message, timer, type) => {
         autoClose: timer,
     });
 }
-
-// const fetchClientsByState = async () => {
-//     return await clientsByCity().then((res) => {
-//         customersByState.value = res.data;
-//     }).catch((err) => {
-//         notify('Erro ao buscar dados.', 2000, 'error')
-//     })
-// }
-//
-// const fetchClientsByCity = async () => {
-//     return await clientsByCity().then((res) => {
-//         customersByCity.value = res.data;
-//     }).catch((err) => {
-//         notify('Erro ao buscar dados.', 2000, 'error')
-//     })
-// }
-//
-// const fetchClientsByAge = async () => {
-//     return await clientsByAge().then((res) => {
-//         customersByAge.value = res.data;
-//     }).catch((err) => {
-//         notify('Erro ao buscar dados.', 2000, 'error')
-//     })
-// }
-
 const fetchData = async () => {
     return await getDashboard().then((res) => {
         customersByAge.value = res.data.age;
