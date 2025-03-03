@@ -1,66 +1,221 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+README
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
 
-## About Laravel
+🚀 Aplicação Laravel + Vue.js (TypeScript)
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+Este projeto é uma aplicação full-stack desenvolvida com **Laravel** no back-end e **Vue.js (TypeScript)** no front-end. Ele utiliza **Docker** para facilitar o ambiente de desenvolvimento, **TailwindCSS** para estilização, **Axios** para requisições HTTP e **Laravel Data** para validação e formatação de dados.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+---
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## 📋 Pré-requisitos
 
-## Learning Laravel
+Antes de começar, certifique-se de ter instalado:
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+- [Docker](https://www.docker.com/get-started)
+- [Docker Compose](https://docs.docker.com/compose/install/)
+- [Node.js](https://nodejs.org/) (caso não use Docker)
+- [Yarn](https://yarnpkg.com/) (caso não use Docker)
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+---
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## 🐳 Rodando com Docker (Recomendado)
 
-## Laravel Sponsors
+### Passo 1: Clone o repositório
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+```bash
+git clone https://github.com/Lucaseduardo20/huggy-project.git
+cd huggy-project
+```
 
-### Premium Partners
+### Passo 2: Inicie os contêineres Docker
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+O Docker já está configurado com um **Dockerfile** e **docker-compose.yml**. Para iniciar os contêineres, execute:
 
-## Contributing
+```bash
+docker-compose up -d
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+Isso irá subir os seguintes serviços:
 
-## Code of Conduct
+- **App**: Servidor Laravel (PHP + Nginx)
+- **DB**: Banco de dados MySQL
+- **Node**: Ambiente para o front-end Vue.js
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+### Passo 3: Instale as dependências do back-end
 
-## Security Vulnerabilities
+Acesse o contêiner do Laravel:
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+```bash
+docker-compose exec app bash
+```
 
-## License
+Dentro do contêiner, instale as dependências do Laravel:
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+```bash
+composer install
+```
+
+### Passo 4: Configure o ambiente
+
+Copie o arquivo `.env.example` para `.env` e configure as variáveis de ambiente:
+
+```bash
+cp .env.example .env
+```
+
+Gere a chave do Laravel:
+
+```bash
+php artisan key:generate
+```
+
+### Passo 5: Execute as migrations
+
+Ainda dentro do contêiner, execute as migrations para criar as tabelas no banco de dados:
+
+```bash
+php artisan migrate
+```
+
+### Passo 6: Instale as dependências do front-end
+
+Em outro terminal, acesse o contêiner do Node:
+
+```bash
+docker-compose exec node bash
+```
+
+Instale as dependências do Vue.js:
+
+```bash
+yarn install
+```
+
+### Passo 7: Inicie o servidor de desenvolvimento do front-end
+
+Dentro do contêiner do Node, execute:
+
+```bash
+yarn dev
+```
+
+O front-end estará disponível em: [http://localhost:5173](http://localhost:5173).
+
+---
+
+## 🖥️ Rodando sem Docker
+
+### Passo 1: Configure o banco de dados
+
+Crie um banco de dados MySQL e configure o arquivo `.env` com as seguintes informações:
+
+```env
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=laravel
+DB_USERNAME=root
+DB_PASSWORD=secret
+```
+
+### Passo 2: Instale as dependências do back-end
+
+No terminal, instale as dependências do Laravel:
+
+```bash
+composer install
+```
+
+### Passo 3: Execute as migrations
+
+Execute as migrations para criar as tabelas no banco de dados:
+
+```bash
+php artisan migrate
+```
+
+### Passo 4: Instale as dependências do front-end
+
+No terminal, instale as dependências do Vue.js:
+
+```bash
+yarn install
+```
+
+### Passo 5: Inicie o servidor de desenvolvimento do front-end
+
+Execute o servidor de desenvolvimento:
+
+```bash
+yarn dev
+```
+
+O front-end estará disponível em: [http://localhost:5173](http://localhost:5173).
+
+---
+
+## 🛠️ Tecnologias Utilizadas
+
+### Back-end:
+- **Laravel**
+- **MySQL**
+- **Laravel Data (DTOs)**
+- **Testes de Feature (CRUD de clientes)**
+
+### Front-end:
+- **Vue.js (TypeScript)**
+- **TailwindCSS**
+- **Axios**
+
+### Ferramentas:
+- **Docker**
+- **Yarn**
+- **Postman** (para testes de API)
+
+---
+
+## 🗂️ Estrutura do Projeto
+
+### Back-end (Laravel):
+- **Controller**: Recebe as requisições HTTP.
+- **Service**: Contém a lógica de negócio.
+- **Repository**: Acessa o banco de dados.
+- **DTOs**: Validação e formatação de dados com Laravel Data.
+- **Testes**: Testes de feature para o CRUD de clientes.
+
+### Front-end (Vue.js):
+- **Components**: Componentes Vue.js.
+- **Views**: Páginas da aplicação.
+- **Services**: Requisições HTTP com Axios.
+- **Router**: Roteamento com vue-router.
+- **Type**: Tipagem Typescript.
+- **Json**: Armazenamento de JSON's úteis.
+
+
+---
+
+## 🧪 Testes
+
+Os testes de feature para o CRUD de **clientes** podem ser executados com:
+
+```bash
+php artisan test
+```
+
+---
+
+## 📡 API Documentation
+
+A collection do Postman com todas as rotas da API está disponível aqui:
+
+[Postman Collection](https://app.getpostman.com/join-team?invite_code=8460493bff1ea97dc9bb862c350c38ccaabafae590db072604e1aa3a63a9f3d3)
+
+---
+
+## 🚨 Observações
+
+- **Senha do banco de dados**: `secret`
+- **Portas**:
+    - Front-end: `5173`
+    - Back-end: `8000`
+    - MySQL: `3306`
