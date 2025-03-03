@@ -4,6 +4,7 @@ namespace App\Services;
 
 namespace App\Services;
 
+use App\Events\StoreClient;
 use App\Jobs\SendWelcomeEmailJob;
 use App\Repositories\ClientRepository;
 use App\Data\ClientData;
@@ -34,6 +35,7 @@ class ClientService
     public function createClient(ClientData $clientDTO): ClientResponseData
     {
         $client = $this->clientRepository->create($clientDTO->toArray());
+        event(new StoreClient($client));
         SendWelcomeEmailJob::dispatch($client)->delay(Carbon::now()->addMinutes(30));
         return ClientResponseData::fromClient($client);
     }

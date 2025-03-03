@@ -4,6 +4,7 @@ use App\Http\Controllers\ClientController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\TwilioController;
+use App\Webhooks\HuggyWebhook;
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('clients', ClientController::class);
@@ -15,4 +16,6 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/voice-response', [TwilioController::class, 'voiceResponse'])->name('twilio.voice-response');
     });
 });
+
+Route::post('/webhook/create', [HuggyWebhook::class, 'createClient']);
 
