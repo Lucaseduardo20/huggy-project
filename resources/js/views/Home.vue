@@ -2,6 +2,21 @@
 import Header from '../components/utils/Header.vue';
 import Container from "../components/utils/Container.vue";
 import HomeTable from "../components/Home/HomeTable.vue";
+import {onMounted} from "vue";
+
+const setToken = () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const token = urlParams.get("token");
+
+    if (token) {
+        localStorage.setItem("token", token);
+        window.location.href = "/home";
+    }
+}
+
+onMounted(() => {
+    setToken();
+})
 </script>
 
 <template>

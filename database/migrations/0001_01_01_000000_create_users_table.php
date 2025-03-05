@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
+            $table->string('client_id')->unique();
             $table->text('access_token');
             $table->text('refresh_token');
             $table->timestamps();

@@ -8,15 +8,14 @@ export default defineConfig({
         laravel({
             input: ['resources/css/app.css', 'resources/js/app.js'],
             refresh: true,
-            server: {
-                host: '0.0.0.0',
-                port: 8000,
-                strictPort: true,
-                headers: {
-                    'Access-Control-Allow-Origin': '*',
-                }
-            }
-
         }),
     ],
+    server: {
+        host: '127.0.0.1',
+        port: 5173,
+        strictPort: true,
+        headers: {
+            'Access-Control-Allow-Origin': '*',
+        }
+    },
 });

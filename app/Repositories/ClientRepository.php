@@ -9,7 +9,7 @@ class ClientRepository
 {
     public function getAll(): Collection
     {
-        return Client::all();
+        return auth()->user()->clients;
     }
 
     public function findById(int $id): ?Client

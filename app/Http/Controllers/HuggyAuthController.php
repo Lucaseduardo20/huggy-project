@@ -37,7 +37,6 @@ class HuggyAuthController extends Controller
         ]);
 
         if ($response->failed()) {
-            logger('deu pau no token' , ['response' => $response]);
             return redirect('/')->withErrors(['auth' => 'Falha ao obter o token de acesso.']);
         }
 
@@ -47,8 +46,12 @@ class HuggyAuthController extends Controller
 
         $user = User::updateOrCreate(
             [
-                'access_token' => 'tst',
-                'refresh_token' => 'tst',
+                'client_id' => env('HUGGY_CLIENT_ID'),
+            ],
+            [
+                'client_id' => env('HUGGY_CLIENT_ID'),
+                'access_token' => $accessToken,
+                'refresh_token' => $refreshToken,
             ]
         );
 
@@ -56,10 +59,8 @@ class HuggyAuthController extends Controller
 
         $sanctumToken = $user->createToken('auth_token')->plainTextToken;
 
-        return response()->json([
-            'token' => $sanctumToken,
-            'message' => 'Usuário logado com sucesso!'
-        ], 200);
+        return redirect()->to(env('NGROK_URL') . "/home?token={$sanctumToken}");
+
     }
 }
 

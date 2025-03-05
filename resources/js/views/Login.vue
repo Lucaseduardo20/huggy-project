@@ -2,10 +2,10 @@
     import Button from "../components/utils/Button.vue";
 
     const login = () => {
-        const clientId = 'APP-95126f96-ee51-4085-9414-8da9c856dd57';
-        const redirectUri = encodeURIComponent('http://192.168.15.28:8000/auth/redirect');
+        const clientId = 'APP-96c6a8a8-b2d7-4c28-996e-f2354833a602';
+        const redirectUri = 'https://8c9e-2804-1b1-f800-5f83-713f-e064-f80c-e8fd.ngrok-free.app/auth/callback';
         const scope = 'install_app read_agent_profile';
-        const authUrl = `https://auth.huggy.app/oauth/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=code&scope=${scope}`;
+        const authUrl = `https://auth.huggy.app/oauth/authorize?scope=${scope}&response_type=code&redirect_uri=${redirectUri}&client_id=${clientId}`;
 
         window.location.href = authUrl;
     }
@@ -14,7 +14,7 @@
 <template>
     <section class="w-full h-full flex flex-col justify-center items-center gap-[24px]">
         <h1 class="font-roboto font-[400] text-[24px]">Login</h1>
-        <Button @click="login" label="Fazer login com a Huggy"></Button>
+        <Button width="250px" @click="login" label="Fazer login com a Huggy"></Button>
     </section>
 </template>
 
