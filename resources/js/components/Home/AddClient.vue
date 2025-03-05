@@ -103,7 +103,7 @@ const clearForm = () => {
         <div class="w-full flex flex-col gap-8 pb-3">
             <TextField :required="true" v-model="formData.name" placeholder="Nome Completo" label="Nome"></TextField>
             <TextField :required="true" v-model="formData.email" placeholder="Email" label="Email"></TextField>
-            <TextField mask="##/##/####" v-model="formData.birthday" :size="SizeEnum.sm" placeholder="Data de Nascimento" label="Data de Nascimento"></TextField>
+            <TextField :required="true" mask="##/##/####" v-model="formData.birthday" :size="SizeEnum.sm" placeholder="Data de Nascimento" label="Data de Nascimento"></TextField>
             <TextField :required="true" mask="(##) #####-####" v-model="formData.phone" :size="SizeEnum.sm" placeholder="Celular" label="Celular"></TextField>
             <TextField :required="true" v-model="formData.address" :size="SizeEnum.lg" placeholder="Endereço" label="Endereço"></TextField>
             <div class="w-3/5 flex gap-5 flex-col sm:flex-row">

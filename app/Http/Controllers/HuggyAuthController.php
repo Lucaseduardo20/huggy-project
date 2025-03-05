@@ -10,18 +10,6 @@ use App\Models\User;
 
 class HuggyAuthController extends Controller
 {
-    public function redirectToHuggy()
-    {
-        $query = http_build_query([
-            'client_id' => env('HUGGY_CLIENT_ID'),
-            'redirect_uri' => env('HUGGY_REDIRECT_URI'),
-            'response_type' => 'code',
-            'scope' => 'install_app read_agent_profile',
-        ]);
-
-        return redirect('https://auth.huggy.app/oauth/authorize?' . $query);
-    }
-
     public function handleHuggyCallback(Request $request)
     {
         if ($request->has('error')) {
